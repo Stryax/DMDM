@@ -3,6 +3,8 @@
 #Creation markov matrix ##############
 modMatrix<- function(dice,trap,circle){
   M = matrix(0, ncol = 15, nrow = 15)
+  trapList1 = NULL
+  trapList2 = NULL
   #Safe dice
   #basic matrix
   if(dice==0){
@@ -19,7 +21,7 @@ modMatrix<- function(dice,trap,circle){
     M[15,15] = 1
   }
   #Normal dice
-  else if(dice==1){
+  if(dice==1){
     #basic matrix
     for(i in 1:15){
       for(j in 1:15){
@@ -91,7 +93,7 @@ modMatrix<- function(dice,trap,circle){
     M = round(M, 2)
   }
   #Risky dice
-  else if(dice==2){
+  if(dice==2){
     for(i in 1:15){
       for(j in 1:15){
         if(i == j || i == j-1 || i == j-2 || i == j-3){
@@ -111,15 +113,23 @@ modMatrix<- function(dice,trap,circle){
     M[14,1] = 1/4
     M[14,2] = 1/4
     
-    if(circle==1){
-      M[13,1] = 1/4
-      M[14,1] = 1/4
-      M[14,2] = 1/4
-    }else if(circle==0){
-      M[12,15] = 1/4
-      M[13,15] = 2/4
-      M[14,15] = 3/4
+    trapList1 = NULL
+    trapList2 = NULL
+    for(i in 1:length(trap)){
+      if(trap[i] == 1){
+        trapList1[length(trapList1)+1] = i
+      }else if(trap[i] == 2){
+        trapList2[length(trapList2)+1] = i
+      }
     }
+    
+    
+    if(circle==1){
+      M[14,1] = 1/3
+    }else if(circle==0){
+      M[14,15] = 2/3
+    }
+
     
     for(j in trapList1){
       #Modifying trap 1 probabilities
