@@ -1,9 +1,10 @@
-#Cell 15 only ########################
 #Trap on shortcut ???
+######################################
 #Creation markov matrix ##############
+######################################
 modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
   M = matrix(0, ncol = 15, nrow = 15)
-  trapList1 = NULL
+  trapList1 = NULL #initiate list for traps
   trapList2 = NULL
   #Safe dice
   #basic matrix
@@ -30,14 +31,14 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
         }
       }
     }
-    M[3,3] = 1/3
+    M[3,3] = 1/3 #Modifying probabilities
     M[3,4] = 1/6
     M[3,5] = 1/6
     M[3,11] = 1/6
     M[3,12] = 1/6
     M[15,15] = 1
-    #Modifying circle probabilities
     
+    #Modifying trap probabilities
     trapList1 = NULL
     trapList2 = NULL
     for(i in 1:length(trap)){
@@ -48,6 +49,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       }
     }
     
+    #Modifying circle probabilities
     
     if(circle==1){
       M[14,1] = 1/3
@@ -82,10 +84,6 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[j, 1] = M[j, 1] + M[j, j]
       
     }
-    M = round(M,2)
-
-    
-    
     M = round(M, 2)
   }
   #Risky dice
@@ -105,10 +103,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,12] = 1/8
     M[3,13] = 1/8
     M[15,15] = 1
-    M[13,1] = 1/4
-    M[14,1] = 1/4
-    M[14,2] = 1/4
     
+    #Trap probabilities
     trapList1 = NULL
     trapList2 = NULL
     for(i in 1:length(trap)){
@@ -119,7 +115,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       }
     }
     
-    
+    #Circle probabilities
     if(circle==1){
       M[14,1] = 1/4
       M[14,2] = 1/4
@@ -165,30 +161,19 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     
     
   }
-  return(M)
+  return(M) #return final matrix
 }
 
-cells = matrix(ncol = 15, nrow = )
-
-trap = matrix(0, 1, 15)
-trap = c(0,0,0,0,0,0,0,0,0,1,0,0,0,2,0)
-matT = matrix(0,15,15)
-matT = modMatrix(2, trap, 1)
+trap = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) #trap list
 
 ##############################################
 # Choice of policy ###########################
 ##############################################
 
-rewM = matrix(1, 15, 15)
-rewM[15,1:3] = 1000 #Cost of s15 = 0
-
 circle = 1 #Can't go past case 15 (set to 1 if it is possible to do so)
 
-iteM = matrix(0, 15, 3) #iteration matrix
 
-
-
-Vk = matrix(0,15,1)
+#Init matrix for each dice
 safeM = modMatrix(0, trap, circle)
 normM = modMatrix(1, trap, circle)
 riskM = modMatrix(2, trap, circle)
@@ -204,51 +189,22 @@ getProb <- function(dice, start){ #Getting prob
   }
 }
 
+Rsa = matrix(1,15,1) #cost matrix
+Rsa[15, ] = 0 #cost at 15 is null
+policy = matrix(0,15,1) #Init policy
+VkT = Rsa
 
-VKF <- function(s, a, Vk){ #calculation of Vk
-  M = NULL
-  if(a == 0){
-    M = safeM
-  }else if(a == 1){
-    M = normM
-  }else if(a == 2){
-    M = riskM
-  }
-  sum = 0
-  for(i in 1:15){
-    Vksa = Vksa + getProb(M, s, i) * (getCost(M, s, i) + gamma * VKF())
-  }
-  
-}  
-
-for(k in 1:15){ #for all states
-  for(a in 1:3){ #for all policies
-    
-  }
-}
-Rsa = matrix(1,15,3)
-Rsa[15, ] = 0
-policy = matrix(0,15,1)
-Vk = matrix(100,15,1)
-Vk[15] = 0
-for(k in 1:1000){
-  for(s in 1:15){
-    min = 10000
-    for(a in 0:2){
-      Vksa[a+1] = Rsa[s, a+1] + sum((getProb(a, s) * Vk[s]))
+Vksa = NULL
+for(k in 1:1000){ #for k iterations (convergence)
+  for(s in 1:15){ #for all states
+    for(a in 0:2){ #for every possible action
+      Vksa[a+1] = Rsa[s] + getProb(a, s) %*% VkT
     }
-    Vk[s] = min(Vksa)
+    VkT[s] = min(Vksa) #Getting min
     policy[s] = which.min(Vksa)-1
   }
 }
-policyTwo = matrix(0,15,1)
-for(s in 1:15){
-  sMin = 10000
-  for(a in 0:2){
-    arg[a+1] = sum(getProb(a, s) * Rsa[s, a+1] + Vk[s])
-    policyTwo[s] = which.min(arg)-1
-  }
-}
+
 
 
 
