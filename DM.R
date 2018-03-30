@@ -1,7 +1,7 @@
 #Cell 15 only ########################
 #Trap on shortcut ???
 #Creation markov matrix ##############
-modMatrix<- function(dice,trap,circle){
+modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
   M = matrix(0, ncol = 15, nrow = 15)
   trapList1 = NULL
   trapList2 = NULL
@@ -83,11 +83,7 @@ modMatrix<- function(dice,trap,circle){
       
     }
     M = round(M,2)
-    for(k in 1:length(trap)){
-      if(k == 1){
-        
-      }
-    }
+
     
     
     M = round(M, 2)
@@ -125,9 +121,12 @@ modMatrix<- function(dice,trap,circle){
     
     
     if(circle==1){
-      M[14,1] = 1/3
+      M[14,1] = 1/4
+      M[14,2] = 1/4
+      M[13,1] = 1/4
     }else if(circle==0){
-      M[14,15] = 2/3
+      M[14,15] = 3/4
+      M[13,15] = 1/2
     }
 
     
@@ -166,12 +165,90 @@ modMatrix<- function(dice,trap,circle){
     
     
   }
+  return(M)
 }
 
 cells = matrix(ncol = 15, nrow = )
 
 trap = matrix(0, 1, 15)
 trap = c(0,0,0,0,0,0,0,0,0,1,0,0,0,2,0)
-
+matT = matrix(0,15,15)
 matT = modMatrix(2, trap, 1)
+
+##############################################
+# Choice of policy ###########################
+##############################################
+
+rewM = matrix(1, 15, 15)
+rewM[15,1:3] = 1000 #Cost of s15 = 0
+
+circle = 1 #Can't go past case 15 (set to 1 if it is possible to do so)
+
+iteM = matrix(0, 15, 3) #iteration matrix
+
+
+
+Vk = matrix(0,15,1)
+safeM = modMatrix(0, trap, circle)
+normM = modMatrix(1, trap, circle)
+riskM = modMatrix(2, trap, circle)
+
+
+getProb <- function(dice, start){ #Getting prob
+  if(dice == 0){
+    return(safeM[start,])
+  }else if(dice == 1){
+    return(normM[start,])
+  }else if(dice == 2){
+    return(riskM[start,])
+  }
+}
+
+
+VKF <- function(s, a, Vk){ #calculation of Vk
+  M = NULL
+  if(a == 0){
+    M = safeM
+  }else if(a == 1){
+    M = normM
+  }else if(a == 2){
+    M = riskM
+  }
+  sum = 0
+  for(i in 1:15){
+    Vksa = Vksa + getProb(M, s, i) * (getCost(M, s, i) + gamma * VKF())
+  }
+  
+}  
+
+for(k in 1:15){ #for all states
+  for(a in 1:3){ #for all policies
+    
+  }
+}
+Rsa = matrix(1,15,3)
+Rsa[15, ] = 0
+policy = matrix(0,15,1)
+Vk = matrix(100,15,1)
+Vk[15] = 0
+for(k in 1:1000){
+  for(s in 1:15){
+    min = 10000
+    for(a in 0:2){
+      Vksa[a+1] = Rsa[s, a+1] + sum((getProb(a, s) * Vk[s]))
+    }
+    Vk[s] = min(Vksa)
+    policy[s] = which.min(Vksa)-1
+  }
+}
+policyTwo = matrix(0,15,1)
+for(s in 1:15){
+  sMin = 10000
+  for(a in 0:2){
+    arg[a+1] = sum(getProb(a, s) * Rsa[s, a+1] + Vk[s])
+    policyTwo[s] = which.min(arg)-1
+  }
+}
+
+
 
