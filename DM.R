@@ -143,9 +143,6 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       
     }
     for(j in trapList2){
-      if(j==11){
-        
-      }else{
       #Modifying trap 2 probabilities
       M[j-3, 1] = M[j-3, 1] + M[j-3, j]
       M[j-3, j] = 0
@@ -159,7 +156,6 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[j, 1] = M[j, 1] + M[j, j]
       M[j, j] = 0
       }
-    }
     M = round(M,2)
     
     
