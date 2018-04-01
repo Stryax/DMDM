@@ -242,15 +242,15 @@ VKF <- function(trap, circle){
     }
   }
   #Init matrix for each dice
-  circle = 1
   safeM = modMatrix(0, trap, circle)
   normM = modMatrix(1, trap, circle)
   riskM = modMatrix(2, trap, circle)
   
   Rsa = matrix(1,15,1) #cost matrix
-  Rsa[15, ] = 0 #cost at 15 is null
+  Rsa[15] = 0 #cost at 15 is null
+  VkT = matrix(0, 1001, 15)
   policy = matrix(0,15,1) #Init policy
-  VkT = Rsa
+  VkT[1,] = Rsa
   
   Vksa = NULL
   for(k in 1:1000){ #for k iterations (convergence)
@@ -265,7 +265,7 @@ VKF <- function(trap, circle){
   return(list(VkT, policy))
 }
 
-listt = VKF(trap, 1)
+listt = VKF(trap, 0)
 
 
 
