@@ -20,6 +20,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,4] = 0.25
     M[3,11] = 0.25
     M[15,15] = 1
+    M[10,15] = 0.5
+    M[10,11]= 0
   }
   #Normal dice
   if(dice==1){
@@ -36,6 +38,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,5] = 1/6
     M[3,11] = 1/6
     M[3,12] = 1/6
+    M[10,11] = 0
+    M[10,12] = 0
     M[15,15] = 1
     
     #Modifying trap probabilities
@@ -52,8 +56,11 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     #Modifying circle probabilities
     
     if(circle==1){
+      M[10,1] = 1/3
+      M[10,15] = 1/3
       M[14,1] = 1/3
     }else if(circle==0){
+      M[10,15] = 2/3
       M[14,15] = 2/3
     }
 
@@ -61,6 +68,22 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     for(j in trapList1){
       #Modifying trap 1 probabilities
       #This is supposing there can't be traps 1 in the first 3 cases.
+      if(j==11){
+        M[11,12]=M[11,12]/2
+        M[11,13]= M[11,13]/2
+        M[11,11] = M[11,11]/2
+        M[11,1]= 1/2
+      }else if(j==12){
+        M[12,13]=M[12,13]/2
+        M[12,14]= M[12,14]/2
+        M[12,12] = M[12,12]/2
+        M[12,2]= 1/2
+      }else if(j==13){
+        M[13,14]=M[13,14]/2
+        M[13,15]= M[13,15]/2
+        M[13,13] = M[13,13]/2
+        M[13,3]= 1/2
+      }else{
       M[j-2, j] = M[j-2, j]/2
       M[j-2, j-3] = M[j-2, j-3] + M[j-2, j]
       
@@ -69,6 +92,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       
       M[j, j] = M[j, j]/2
       M[j, j-3] = M[j, j-3] + M[j, j]
+      }
       
     }
     for(j in trapList2){
@@ -102,6 +126,9 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,11] = 1/8
     M[3,12] = 1/8
     M[3,13] = 1/8
+    M[10,11] = 0
+    M[10,12] = 0
+    M[10,13] = 0
     M[15,15] = 1
     
     #Trap probabilities
@@ -120,15 +147,38 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[14,1] = 1/4
       M[14,2] = 1/4
       M[13,1] = 1/4
+      M[10,1] = 1/4
+      M[10,2] = 1/4
+      M[10,15] = 1/4
     }else if(circle==0){
       M[14,15] = 3/4
       M[13,15] = 1/2
+      M[10,15] = 3/4
     }
 
     
     for(j in trapList1){
       #Modifying trap 1 probabilities
       #This is supposing there can't be traps 1 in the first 3 cases.
+      if(j==11){
+        M[11,12] = 0
+        M[11,13] = 0
+        M[11,14] = 0
+        M[11,11] = 0
+        M[11,1] = 1
+      } else if(j==12){
+        M[12,13] = 0
+        M[12,14] = 0
+        M[12,15] = 0
+        M[12,12] = 0
+        M[12,2] = 1
+      } else if(j==13){
+        M[13,14] = 0
+        M[13,15] = 0
+        M[13,1] = 0
+        M[13,13] = 0
+        M[13,3] = 1
+      }else{
       M[j-3, j-3] = M[j-3, j-3] + M[j-3, j]
       M[j-3, j] = 0
       
@@ -140,7 +190,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       
       M[j, j-3] = M[j-2, j-3] + M[j, j]
       M[j, j] = 0
-      
+      }
     }
     for(j in trapList2){
       #Modifying trap 2 probabilities
@@ -163,7 +213,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
   return(M) #return final matrix
 }
 
-trap = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) #trap list
+trap = c(0,0,0,0,0,0,0,0,0,0,1,1,1,0,0) #trap list
 
 ##############################################
 # Choice of policy ###########################
