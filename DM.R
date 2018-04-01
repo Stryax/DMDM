@@ -38,6 +38,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,5] = 1/6
     M[3,11] = 1/6
     M[3,12] = 1/6
+    M[9,11] = 0
+    M[9,15] = 1/3
     M[10,11] = 0
     M[10,12] = 0
     M[15,15] = 1
@@ -126,6 +128,10 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     M[3,11] = 1/8
     M[3,12] = 1/8
     M[3,13] = 1/8
+    M[8,11] = 0
+    M[8,15] = 1/4
+    M[9,11] = 0
+    M[9,12] = 0
     M[10,11] = 0
     M[10,12] = 0
     M[10,13] = 0
@@ -147,6 +153,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[14,1] = 1/4
       M[14,2] = 1/4
       M[13,1] = 1/4
+      M[9,1] = 1/4
+      M[9,15] = 1/4
       M[10,1] = 1/4
       M[10,2] = 1/4
       M[10,15] = 1/4
@@ -154,6 +162,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[14,15] = 3/4
       M[13,15] = 1/2
       M[10,15] = 3/4
+      M[9,15] = 1/2
     }
 
     
