@@ -213,7 +213,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
   return(M) #return final matrix
 }
 
-trap = c(0,0,0,0,0,0,0,0,0,0,1,1,1,0,0) #trap list
+trap = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) #trap list
 
 ##############################################
 # Choice of policy ###########################
@@ -233,6 +233,7 @@ VKF <- function(trap, circle){
     }
   }
   #Init matrix for each dice
+  circle = 1
   safeM = modMatrix(0, trap, circle)
   normM = modMatrix(1, trap, circle)
   riskM = modMatrix(2, trap, circle)
