@@ -71,20 +71,36 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       #Modifying trap 1 probabilities
       #This is supposing there can't be traps 1 in the first 3 cases.
       if(j==11){
-        M[11,12]=M[11,12]/2
-        M[11,13]= M[11,13]/2
+        M[2,11] = M[2,11]/2
+        M[2,1] = M[2,1] + M[2,11]
+        
+        M[3,11] = M[3, 11]/2
+        M[3,1] = M[3,1] + M[3, 11]
+        
         M[11,11] = M[11,11]/2
-        M[11,1]= 1/2
+        M[11,1] = M[11,1] + M[11,11]
+        
+        ####
       }else if(j==12){
-        M[12,13]=M[12,13]/2
-        M[12,14]= M[12,14]/2
-        M[12,12] = M[12,12]/2
-        M[12,2]= 1/2
-      }else if(j==13){
-        M[13,14]=M[13,14]/2
-        M[13,15]= M[13,15]/2
-        M[13,13] = M[13,13]/2
-        M[13,3]= 1/2
+        M[3, 12] = M[3, 12]/2
+        M[3, 2] = M[3, 2] + M[3, 2]
+        
+        M[11, 12] = M[11, 12]/2
+        M[11, 2] = M[11, 2] + M[11, 12]
+        
+        M[12, 12] = M[12, 12]/2
+        M[12, 2] = M[12, 2] + M[12, 12]
+        
+      }
+      else if(j==13){
+        M[11, 13] = M[11, 13]/2
+        M[11, 3] = M[11, 3] + M[11, 13]
+        
+        M[12, 13] = M[12, 13]/2
+        M[12, 3] = M[12, 3] + M[12, 13]
+        
+        M[13, 13] = M[13, 13]/2
+        M[13, 3] = M[13, 3] + M[13, 13]
       }else{
       M[j-2, j] = M[j-2, j]/2
       M[j-2, j-3] = M[j-2, j-3] + M[j-2, j]
@@ -99,7 +115,28 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     }
     for(j in trapList2){
       #Modifying trap 2 probabilities
+      if(j==11){
+        M[2, 11] = M[2, 11]/2
+        M[2, 1] = M[2, 1] + M[2, 11]
+        
+        M[3, 11] = M[3, 11]/2
+        M[3, 1] = M[3, 1] + M[3, 11]
+        
+        M[11, 11] = M[11, 11]/2
+        M[11, 1] = M[11, 1] + M[11, 11]
 
+        
+
+      }else if(j==12){
+        M[3, 12] = M[3, 12]/2
+        M[3, 1] = M[3, 1] + M[3, 12]
+        
+        M[11, 12] = M[11, 12]/2
+        M[11, 1] = M[11, 1] + M[11, 12]
+        
+        M[12, 12] = M[12, 12]/2
+        M[12, 1] = M[12, 1] + M[12, 12]
+      }else{
       M[j-2, j] = M[j-2, j]/2
       M[j-2, 1] = M[j-2, 1] + M[j-2, j]
       
@@ -109,6 +146,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       M[j, j] = M[j, j]/2
       M[j, 1] = M[j, 1] + M[j, j]
       
+      }
     }
     M = round(M, 2)
   }
@@ -170,23 +208,41 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       #Modifying trap 1 probabilities
       #This is supposing there can't be traps 1 in the first 3 cases.
       if(j==11){
-        M[11,12] = 0
-        M[11,13] = 0
-        M[11,14] = 0
-        M[11,11] = 0
-        M[11,1] = 1
+        M[1, 1] = M[1, 1] + M[1, 11]
+        M[1, 11] = 0
+        
+        M[2, 1] = M[2, 1] + M[2, 11]
+        M[2, 11] = 0
+        
+        M[3, 1] = M[2, 1] + M[3, 11]
+        M[3, 11] = 0
+        
+        M[11, 1] = M[2, 1] + M[11, 11]
+        M[11, 11] = 0
       } else if(j==12){
-        M[12,13] = 0
-        M[12,14] = 0
-        M[12,15] = 0
-        M[12,12] = 0
-        M[12,2] = 1
+        M[2, 2] = M[2, 2] + M[2, 12]
+        M[2, 12] = 0
+        
+        M[3, 3] = M[3, 2] + M[3, 12]
+        M[3, 12] = 0
+        
+        M[11, 2] = M[3, 2] + M[11, 12]
+        M[11, 12] = 0
+        
+        M[12, 2] = M[3, 2] + M[12, 12]
+        M[12, 12] = 0
       } else if(j==13){
-        M[13,14] = 0
-        M[13,15] = 0
-        M[13,1] = 0
-        M[13,13] = 0
-        M[13,3] = 1
+        M[3, 3] = M[3, 3] + M[3, 13]
+        M[3, 13] = 0
+        
+        M[11, 3] = M[11, 3] + M[11, 13]
+        M[11, 13] = 0
+        
+        M[12, 3] = M[11, 3] + M[12, 13]
+        M[12, 13] = 0
+        
+        M[13, 3] = M[11, 3] + M[13, 13]
+        M[13, 13] = 0
       }else{
       M[j-3, j-3] = M[j-3, j-3] + M[j-3, j]
       M[j-3, j] = 0
@@ -203,6 +259,43 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
     }
     for(j in trapList2){
       #Modifying trap 2 probabilities
+      if(j==11){
+        M[1, 1] = M[1, 1] + M[1, 11]
+        M[1, 11] = 0
+        
+        M[2, 1] = M[2, 1] + M[2, 11]
+        M[2, 11] = 0
+        
+        M[3, 1] = M[3, 1] + M[3, 11]
+        M[3, 11] = 0
+        
+        M[11, 1] = M[11, 1] + M[11, 11]
+        M[11, 11] = 0
+      } else if(j==12){
+        M[2, 1] = M[2, 1] + M[2, 12]
+        M[2, 12] = 0
+        
+        M[3, 1] = M[3, 1] + M[3, 12]
+        M[3, 12] = 0
+        
+        M[11, 1] = M[11, 1] + M[11, 12]
+        M[11, 12] = 0
+        
+        M[12, 1] = M[12, 1] + M[12, 12]
+        M[12, 12] = 0
+      } else if(j==13){
+        M[3, 1] = M[3, 1] + M[3, 13]
+        M[3, 13] = 0
+        
+        M[11, 1] = M[11, 1] + M[11, 13]
+        M[11, 13] = 0
+        
+        M[12, 1] = M[12, 1] + M[12, 13]
+        M[12, 13] = 0
+        
+        M[13, 1] = M[13, 1] + M[13, 13]
+        M[13, 13] = 0
+      }else
       M[j-3, 1] = M[j-3, 1] + M[j-3, j]
       M[j-3, j] = 0
       
@@ -214,7 +307,8 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
       
       M[j, 1] = M[j, 1] + M[j, j]
       M[j, j] = 0
-      }
+    }
+  }
     M = round(M,2)
     
     
@@ -222,7 +316,7 @@ modMatrix<- function(dice,trap,circle){ #Must be used on a matrix full of 0's
   return(M) #return final matrix
 }
 
-trap = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) #trap list
+
 
 ##############################################
 # Choice of policy ###########################
@@ -265,8 +359,9 @@ VKF <- function(trap, circle){
   return(list(VkT, policy))
 }
 
+trap = c(0,0,0,0,1,0,0,0,0,0,0,1,0,0,0) #trap list
 listt = VKF(trap, 0)
 
-
+listt[[2]]
 
 
