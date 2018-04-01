@@ -256,9 +256,9 @@ VKF <- function(trap, circle){
   for(k in 1:1000){ #for k iterations (convergence)
     for(s in 1:15){ #for all states
       for(a in 0:2){ #for every possible action
-        Vksa[a+1] = Rsa[s] + getProb(a, s) %*% VkT
+        Vksa[a+1] = Rsa[s] + getProb(a, s) %*% VkT[k,]
       }
-      VkT[s] = min(Vksa) #Getting min
+      VkT[k+1, s] = min(Vksa) #Getting min
       policy[s] = which.min(Vksa)-1
     }
   }
